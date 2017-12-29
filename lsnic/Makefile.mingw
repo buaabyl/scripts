@@ -1,0 +1,15 @@
+# run manuf.py first
+
+all:lsnic.exe
+
+lsnic.exe:lsnic.c manuf.o if_type.o
+	gcc -o $@ $^ -liphlpapi
+
+manuf.o:manuf.c manuf.h
+	gcc -c $<
+
+if_type.o:if_type.c if_type.h
+	gcc -c $<
+
+
+
