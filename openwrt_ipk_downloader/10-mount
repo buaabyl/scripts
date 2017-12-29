@@ -1,0 +1,58 @@
+#!/bin/sh
+#
+# /etc/hotplug.d/block/mount
+#
+# tips: sh not allow space between var and '='!
+#
+# $DEVPATH: /devices/platform/ehci-platform/usb1/....../12:0:0:0/block/sda/sda4
+# $ACTION: add, remove
+#
+
+
+# Get device path
+logfile=/tmp/10-mount.log
+
+blkdev=`dirname $DEVPATH`
+blktop=`basename $blkdev`
+device=`basename $DEVPATH`
+
+# Debug information
+# echo "hotplug.d/block/10-mount" >> $logfile
+# echo "BASE: $blkdev" >> $logfile
+# echo "TOP: $blktop" >> $logfile
+# echo "PATH: $DEVPATH" >> $logfile
+# echo "DEVICE: $device" >> $logfile
+
+
+
+
+# Just process partitation notify
+#TODO call `block info` to get file system type
+if [ $blktop != "block" ]; then
+    fs_pattern='TYPE="([^"\"]+)"'
+    fs=`block info|grep $device|grep -Eo $fs_pattern`
+    mount_fs=" "
+    if [ $? -eq 0 ]; then
+        fs=${fs#TYPE=\"}
+        fs=${fs%\"}
+        mount_fs="-t $fs"
+    fi
+
+    case "$ACTION" in
+        add)
+            echo mount $mount_fs /dev/$device /mnt/udisk >> $logfile
+            mount $mount_fs /dev/$device /mnt/udisk >> $logfile
+        ;;
+        remove)
+            echo umount /mnt/udisk >> $logfile
+            umount /mnt/udisk >> $logfile
+        ;;
+   esac
+fi
+
+
+echo " " >> $logfile
+
+
+
+
