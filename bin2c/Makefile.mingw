@@ -1,0 +1,40 @@
+ROOT 			= ../..
+LIBARY_PATH		= $(ROOT)/library
+PYGETOPT_PATH	= $(LIBARY_PATH)/pygetopt
+
+OBJS_PATH 		= objs
+TARGET_PATH		= target
+
+GCC	   = @gcc
+
+CFLAGS += -I $(PYGETOPT_PATH)/include
+CFLAGS += -ggdb
+CFLAGS += -Wall -Werror
+LFLAGS += 
+
+VPATH	+= $(PYGETOPT_PATH)/source
+
+OBJS	= \
+	$(OBJS_PATH)/bin2c.o \
+	$(OBJS_PATH)/pygetopt.o
+
+all:$(OBJS_PATH) $(TARGET_PATH) \
+	$(TARGET_PATH)/bin2c.exe
+
+$(OBJS_PATH):
+	mkdir $@
+
+$(TARGET_PATH):
+	mkdir $@
+
+$(TARGET_PATH)/bin2c.exe:$(OBJS)
+	$(GCC) $(LFLAGS) $^ -o $@
+
+$(OBJS_PATH)/%.o:%.c
+	@echo compiling $<
+	$(GCC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -rf $(OBJS_PATH)
+	rm -rf $(TARGET_PATH)
+
