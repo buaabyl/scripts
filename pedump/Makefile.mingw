@@ -1,0 +1,14 @@
+ROOT			= ../..
+LIBRARY_PATH	= $(ROOT)/Library
+
+CFLAGS = -I $(LIBRARY_PATH)/pygetopt/include -Wall -Werror
+#CFLAGS += -ggdb
+
+all:pedump.exe
+
+pedump.exe:pedump.c $(LIBRARY_PATH)/pygetopt/source/pygetopt.c
+	gcc $(CFLAGS) $^ -o $@
+
+clean:
+	msys rm -rf *.exe
+

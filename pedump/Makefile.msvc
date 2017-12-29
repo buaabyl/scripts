@@ -1,0 +1,15 @@
+ROOT			= ../..
+LIBRARY_PATH	= $(ROOT)/Library
+
+CFLAGS = /nologo /I $(LIBRARY_PATH)/pygetopt/include /c
+LFLAGS = /nologo
+
+all:pedump.exe
+
+pedump.exe:pedump.c $(LIBRARY_PATH)/pygetopt/source/pygetopt.c
+	cl $(CFLAGS) pedump.c $(LIBRARY_PATH)/pygetopt/source/pygetopt.c
+	link $(LFLAGS) pedump.obj pygetopt.obj /out:$@
+
+clean:
+	rm -rf *.exe
+
