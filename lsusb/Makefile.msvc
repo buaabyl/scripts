@@ -1,0 +1,36 @@
+#
+# libusb is compiled by /MD
+# support two version:
+# 	libusb static lib
+# 	libusb dynamic lib
+# all of above is dynamic linked to VCRT!
+#
+# so I build libusb-1.0 myself
+#
+CFLAGS = /nologo /I include /MT /c 
+LFLAGS = /nologo /libpath:lib
+
+all:lsdevs.exe usbcdc.exe
+
+lsdevs.exe:listdevs.obj libusbids.obj
+	link $(LFLAGS) listdevs.obj libusbids.obj libusb-1.0.lib /out:$@
+
+usbcdc.exe:usbcdc.obj
+	link $(LFLAGS) usbcdc.obj libusb-1.0.lib /out:$@
+
+usbcdc.obj:usbcdc.c
+	cl $(CFLAGS) usbcdc.c
+
+listdevs.obj:listdevs.c
+	cl $(CFLAGS) listdevs.c
+
+libusbids.obj:libusbids.c
+	cl $(CFLAGS) libusbids.c
+
+clean:
+	rm -rf *.obj
+	rm -rf *.exe
+
+cleanall:clean
+	rm -rf libusb
+

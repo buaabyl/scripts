@@ -1,0 +1,29 @@
+CFLAGS = -I . -c
+LFLAGS = -L . -static -static-libgcc
+
+all:lsusb.exe usbcdc.exe
+
+libusb:
+	7za x libusb.7z
+
+lsusb.exe:lsusb.o libusbids.o usbids_embbed.o
+	gcc $(LFLAGS) $^ -lusb-1.0 -o $@
+
+usbcdc.exe:usbcdc.o
+	gcc $(LFLAGS) usbcdc.o -lusb-1.0 -o $@
+
+usbids_embbed.c:usbids_embbed.h
+
+usbids_embbed.h:usb-2016.11.08.ids
+	python gen_usbids_embbed.py $<
+
+%.o:%.c
+	gcc $(CFLAGS) $< -o $@
+
+clean:
+	rm -rf *.o
+
+cleanall:clean
+	rm -rf *.exe
+
+

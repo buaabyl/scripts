@@ -1,0 +1,8 @@
+http://www.linux-usb.org/usb.ids
+
+可以查看最后修改的时间
+curl -I http://www.linux-usb.org/usb.ids
+
+from the beginning is vid&pid list
+
+there are list of class at usb.ids:16671, and other list
